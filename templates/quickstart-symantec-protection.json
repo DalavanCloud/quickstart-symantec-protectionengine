@@ -1,0 +1,42 @@
+[
+    {
+        "ParameterKey": "AZs",
+        "ParameterValue": "NEED_VALUE"
+    },
+    {
+        "ParameterKey": "BucketName",
+        "ParameterValue": "alfred_symentec_bucket"
+    },
+    {
+        "ParameterKey": "InstanceCount",
+        "ParameterValue": "2"
+    },
+    {
+        "ParameterKey": "InstanceType",
+        "ParameterValue": "c4.4xlarge"
+    },
+    {
+        "ParameterKey": "KeyName",
+        "ParameterValue": "cikey"
+    },
+    {
+        "ParameterKey": "LicenseMode",
+        "ParameterValue": "BYOL"
+    },
+    {
+        "ParameterKey": "SPELicenseFile",
+        "ParameterValue": "filename"
+    },
+    {
+        "ParameterKey": "SSHLocation",
+        "ParameterValue": "10.1.2.3/32"
+    },
+    {
+        "ParameterKey": "Subnets",
+        "ParameterValue": "NEED_VALUE"
+    },
+    {
+        "ParameterKey": "VpcId",
+        "ParameterValue": "NEED_VALUE"
+    }
+]

@@ -1,0 +1,415 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "SPE_QSG: Create a load balanced SPE setup in an existing Virtual Private Cloud (VPC). **WARNING** This template creates one or more Amazon EC2 instances and an Elastic Load Balancer. You will be billed for the AWS resources used if you create a stack from this template.",
+
+  "Parameters" : {
+
+    "VpcId" : {
+      "Type" : "AWS::EC2::VPC::Id",
+      "Description" : "VpcId of your existing Virtual Private Cloud (VPC)",
+      "ConstraintDescription" : "must be the VPC Id of an existing Virtual Private Cloud."
+    },
+	
+	"LicenseMode" : {
+      "Type" : "String",
+      "Description" : "Type of Licensing mode PAID or BYOL",
+      "ConstraintDescription" : "must be a mode of license",
+	  "Default" : "BYOL",
+      "AllowedValues" : [ "BYOL", "PAID"]
+    },
+
+    "Subnets" : {
+      "Type" : "List<AWS::EC2::Subnet::Id>",
+      "Description" : "The list of SubnetIds in your Virtual Private Cloud (VPC)",
+      "ConstraintDescription" : "must be a list of an existing subnets in the selected Virtual Private Cloud."
+    },
+
+    "AZs" : {
+      "Type" : "List<AWS::EC2::AvailabilityZone::Name>",
+      "Description" : "The list of AvailabilityZones for your Virtual Private Cloud (VPC)",
+      "ConstraintDescription" : "must be a list if valid EC2 availability zones for the selected Virtual Private Cloud"
+    },
+
+    "KeyName" : {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type" : "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
+    },
+
+    "SSHLocation" : {
+      "Description" : "Lockdown SSH access to the bastion host (default can be accessed from anywhere)",
+      "Type" : "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription" : "must be a valid CIDR range of the form x.x.x.x/x."
+    },
+	
+	"InstanceType" : {
+      "Description" : "SPE EC2 instance type",
+      "Type" : "String",
+      "Default" : "c4.4xlarge",
+      "AllowedValues" : [ "m4.2xlarge", "c4.4xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+
+    "InstanceCount" : {
+      "Description" : "Number of SPE EC2 instances to launch. Recommended - atleast twice the number of subnets selected.",
+      "Type" : "Number",
+      "Default" : "2"
+    },
+	
+	"BucketName" : {
+      "Description" : "Name of S3 bucket containing SPE license (Required for BYOL Mode)",
+      "Type" : "String"
+    },
+	
+	"SPELicenseFile" : {
+	  "Description" : "Name of the SPE license file e.g. sym5421558000.slf (Required for BYOL Mode)",
+	  "Type" : "String"
+	}
+  },
+
+  "Mappings" : {
+    "AWSInstanceType2Arch" : {
+      "m4.2xlarge"  : { "Arch" : "HVM64"  },
+      "c4.4xlarge"  : { "Arch" : "HVM64"  }
+    },
+	
+	"AWSRegionArch2AMIBYOL" : {
+      "us-east-1"        : {"HVM64" : "ami-b91f32ae"},
+	  "us-east-2"        : {"HVM64" : "ami-3b48125e"},
+      "us-west-2"        : {"HVM64" : "ami-628e2d02"},
+      "us-west-1"        : {"HVM64" : "ami-c90356a9"},
+      "eu-west-1"        : {"HVM64" : "ami-c2a0f6b1"},
+      "eu-central-1"     : {"HVM64" : "ami-d1ca30be"},
+      "ap-northeast-1"   : {"HVM64" : "ami-8dd178ec"},
+      "ap-northeast-2"   : {"HVM64" : "ami-9877a3f6"},
+      "ap-southeast-1"   : {"HVM64" : "ami-d0ee4db3"},
+      "ap-southeast-2"   : {"HVM64" : "ami-26320d45"},
+	  "ap-south-1"  	 : {"HVM64" : "ami-388cf857"},
+      "sa-east-1"        : {"HVM64" : "ami-35920d59"}
+    },
+	
+	"AWSRegionArch2AMIPAID" : {
+      "us-east-1"        : {"HVM64" : "ami-70605667"},
+	  "us-east-2"        : {"HVM64" : "ami-c8653fad"},
+      "us-west-2"        : {"HVM64" : "ami-d277dbb2"},
+      "us-west-1"        : {"HVM64" : "ami-a23662c2"},
+      "eu-west-1"        : {"HVM64" : "ami-a2025fd1"},
+      "eu-central-1"     : {"HVM64" : "ami-4d965222"},
+      "ap-northeast-1"   : {"HVM64" : "ami-4ad5612b"},
+      "ap-northeast-2"   : {"HVM64" : "ami-b3a275dd"},
+      "ap-southeast-1"   : {"HVM64" : "ami-818527e2"},
+      "ap-southeast-2"   : {"HVM64" : "ami-d3142ab0"},
+	  "ap-south-1"  	 : {"HVM64" : "ami-b13f48de"},
+      "sa-east-1"        : {"HVM64" : "ami-eeed7382"}
+    }
+
+  },
+  
+  "Conditions" : {
+  
+	"BYOLMode" : {
+		"Fn::Equals" : [
+		  {
+			"Ref" : "LicenseMode"
+		  },
+		  "BYOL"
+		]
+	},
+	
+	"PAIDMode" : {
+		"Fn::Equals" : [
+		  {
+			"Ref" : "LicenseMode"
+		  },
+		  "PAID"
+		]
+	}
+  },
+
+  "Resources" : {
+  
+    "CfnUser" : {
+      "Type" : "AWS::IAM::User",
+	  "Condition" : "BYOLMode",
+      "Properties" : {
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "root",
+          "PolicyDocument": { "Statement":[{
+            "Effect"   : "Allow",
+            "Action"   : [
+              "cloudformation:DescribeStackResource",
+              "s3:GetObject"
+            ],
+            "Resource" :"*"
+          }]}
+        }]
+      }
+    },
+
+    "CfnKeys" : {
+      "Type" : "AWS::IAM::AccessKey",
+	  "Condition" : "BYOLMode",
+      "Properties" : {
+        "UserName" : {"Ref": "CfnUser"}
+      }
+    },
+
+    "BucketPolicy" : {
+      "Type" : "AWS::S3::BucketPolicy",
+	  "Condition" : "BYOLMode",
+      "Properties" : {
+        "PolicyDocument": {
+          "Version"      : "2008-10-17",
+          "Id"           : "SPEQSGPolicy",
+          "Statement"    : [{
+            "Sid"        : "ReadAccess",
+            "Action"     : ["s3:GetObject"],
+            "Effect"     : "Allow",
+            "Resource"   : { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "BucketName" }, "/*"]]},
+            "Principal"  : { "AWS": {"Fn::GetAtt" : ["CfnUser", "Arn"]} }
+          }]
+        },
+        "Bucket" : { "Ref" : "BucketName" }
+      }
+    }, 
+  
+    "SPEGroup" : {
+      "Type" : "AWS::AutoScaling::AutoScalingGroup",
+      "Properties" : {
+        "AvailabilityZones" : { "Ref" : "AZs" },
+        "VPCZoneIdentifier" : { "Ref" : "Subnets" },
+        "LaunchConfigurationName" : { 
+		  "Fn::If" : [
+			"BYOLMode",
+			{"Ref" : "LaunchConfigBYOL"},
+			{"Ref" : "LaunchConfigPAID"}
+		  ]
+		},
+        "MinSize" : { "Ref" : "InstanceCount" },
+        "MaxSize" : { "Ref" : "InstanceCount" },
+        "DesiredCapacity" : { "Ref" : "InstanceCount" },
+        "LoadBalancerNames" : [ { "Ref" : "ElasticLoadBalancer" } ]
+      },
+      "CreationPolicy" : {
+        "ResourceSignal" : {
+          "Timeout" : "PT60M"
+        }
+      },
+      "UpdatePolicy": {
+        "AutoScalingRollingUpdate": {
+          "MinInstancesInService": "1",
+          "MaxBatchSize": "1",
+          "PauseTime" : "PT15M",
+          "WaitOnResourceSignals": "true"
+        }
+      }
+    },
+
+    "LaunchConfigBYOL" : {
+      "Type" : "AWS::AutoScaling::LaunchConfiguration",
+	  "Condition" : "BYOLMode",
+      "Metadata" : {
+        "Comment" : "Install a SPE ",
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+
+            "files" : {
+
+              "/etc/cfn/cfn-hup.conf" : {
+                "content" : { "Fn::Join" : ["", [
+                  "[main]\n",
+                  "stack=", { "Ref" : "AWS::StackId" }, "\n",
+                  "region=", { "Ref" : "AWS::Region" }, "\n"
+                ]]},
+                "mode"    : "000400",
+                "owner"   : "root",
+                "group"   : "root"
+              },
+
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf" : {
+                "content": { "Fn::Join" : ["", [
+                  "[cfn-auto-reloader-hook]\n",
+                  "triggers=post.update\n",
+                  "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                  "action=/usr/bin/cfn-init -v ",
+                  "         --stack ", { "Ref" : "AWS::StackName" },
+                  "         --resource LaunchConfigBYOL ",
+                  "         --region ", { "Ref" : "AWS::Region" }, "\n",
+                  "runas=root\n"
+                ]]}
+              },
+
+			  "/opt/Symantec/Licenses/SPE_license.slf" : {
+				"source" : {
+					"Fn::Join" : ["", ["http://", { "Ref" : "BucketName" }, ".s3.amazonaws.com/", {"Ref" : "SPELicenseFile"}]]
+				}
+			  }
+            },
+			"commands" : {
+			  "1-restart-service" : {
+				"command" :   "/etc/init.d/symcscan restart"
+			  }
+			}
+          }
+        },
+		"AWS::CloudFormation::Authentication" : {
+          "S3AccessCreds" : {
+            "type" : "S3",
+            "accessKeyId" : { "Ref" : "CfnKeys" },
+            "secretKey" : {"Fn::GetAtt": ["CfnKeys", "SecretAccessKey"]},
+            "buckets" : [ { "Ref" : "BucketName" } ]
+          }
+        }
+	  },
+      "Properties" : {
+        "AssociatePublicIpAddress" : "true",
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMIBYOL", { "Ref" : "AWS::Region" },
+                         { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "KeyName"        : { "Ref" : "KeyName" },
+        "InstanceType" : { "Ref" : "InstanceType" },
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+			 
+             "/usr/bin/cfn-init -v ",
+             "         --stack ", { "Ref" : "AWS::StackName" },
+             "         --resource LaunchConfigBYOL ",
+             "         --region ", { "Ref" : "AWS::Region" }, "\n",
+
+             "/usr/bin/cfn-signal -e $? ",
+             "         --stack ", { "Ref" : "AWS::StackName" },
+             "         --resource SPEGroup ",
+             "         --region ", { "Ref" : "AWS::Region" }, "\n"
+        ]]}}
+      }
+    },
+	
+	"LaunchConfigPAID" : {
+      "Type" : "AWS::AutoScaling::LaunchConfiguration",
+	  "Condition" : "PAIDMode",
+      "Metadata" : {
+        "Comment" : "Install a SPE ",
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+
+            "files" : {
+
+              "/etc/cfn/cfn-hup.conf" : {
+                "content" : { "Fn::Join" : ["", [
+                  "[main]\n",
+                  "stack=", { "Ref" : "AWS::StackId" }, "\n",
+                  "region=", { "Ref" : "AWS::Region" }, "\n"
+                ]]},
+                "mode"    : "000400",
+                "owner"   : "root",
+                "group"   : "root"
+              },
+
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf" : {
+                "content": { "Fn::Join" : ["", [
+                  "[cfn-auto-reloader-hook]\n",
+                  "triggers=post.update\n",
+                  "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                  "action=/usr/bin/cfn-init -v ",
+                  "         --stack ", { "Ref" : "AWS::StackName" },
+                  "         --resource LaunchConfigPAID ",
+                  "         --region ", { "Ref" : "AWS::Region" }, "\n",
+                  "runas=root\n"
+                ]]}
+              }
+            }
+          }
+        }
+	  },
+      "Properties" : {
+        "AssociatePublicIpAddress" : "true",
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMIPAID", { "Ref" : "AWS::Region" },
+                         { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "KeyName"        : { "Ref" : "KeyName" },
+        "InstanceType" : { "Ref" : "InstanceType" },
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+			 
+             "/usr/bin/cfn-init -v ",
+             "         --stack ", { "Ref" : "AWS::StackName" },
+             "         --resource LaunchConfigPAID ",
+             "         --region ", { "Ref" : "AWS::Region" }, "\n",
+
+             "/usr/bin/cfn-signal -e $? ",
+             "         --stack ", { "Ref" : "AWS::StackName" },
+             "         --resource SPEGroup ",
+             "         --region ", { "Ref" : "AWS::Region" }, "\n"
+        ]]}}
+      }
+    },
+
+    "ElasticLoadBalancer" : {
+      "Type" : "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties" : {
+        "CrossZone" : "true",
+        "SecurityGroups" : [ { "Ref" : "LoadBalancerSecurityGroup" } ],
+        "Subnets" : { "Ref" : "Subnets" },
+        "Listeners" : [ {
+          "LoadBalancerPort" : "1344",
+          "InstancePort" : "1344",
+          "Protocol" : "TCP"
+        } ],
+        "HealthCheck" : {
+          "Target" : "TCP:1344",
+          "HealthyThreshold" : "3",
+          "UnhealthyThreshold" : "5",
+          "Interval" : "30",
+          "Timeout" : "25"
+        }
+      }
+    },
+
+    "LoadBalancerSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable ICAP access on port 1344",
+        "VpcId" : { "Ref" : "VpcId" },
+        "SecurityGroupIngress" : [ {
+          "IpProtocol" : "tcp",
+          "FromPort" : "1344",
+          "ToPort" : "1344",
+          "CidrIp" : "0.0.0.0/0"
+        } ],
+        "SecurityGroupEgress" : [ {
+          "IpProtocol" : "tcp",
+          "FromPort" : "1344",
+          "ToPort" : "1344",
+          "CidrIp" : "0.0.0.0/0"
+        } ]
+      }
+    },
+
+    "InstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable ICAP access and SSH access",
+        "VpcId" : { "Ref" : "VpcId" },
+        "SecurityGroupIngress" : [
+          { "IpProtocol" : "tcp", "FromPort" : "1344", "ToPort" : "1344", "SourceSecurityGroupId" : { "Ref" : "LoadBalancerSecurityGroup" } },
+          { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : { "Ref" : "SSHLocation" } }
+        ]
+      }
+    }
+  },
+
+  "Outputs" : {
+    "PublicDNS" : {
+      "Description" : "Public DNS of LoadBalancer",
+      "Value" :  { "Fn::GetAtt" : [ "ElasticLoadBalancer", "DNSName" ]}
+    }
+
+  }
+}
+
