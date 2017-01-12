@@ -19,9 +19,8 @@ global:
   reporting: true
  
 tests:
-  quickstart-symantec-protection-enginet1:
-    parameter_input: quickstart-symantec-protection-engine-example-params1.json
-    template_file: quickstart-symantec-protection-engine-example1.template
-  quickstart-symantec-protection-enginet2:
-    parameter_input: quickstart-symantec-protection-engine-example-params2.json
-    template_file: quickstart-symantec-protection-engine-example2.template
+  symantec-pe:
+    parameter_input: quickstart-symantec-protectionengine.json
+    template_file: quickstart-symantec-protectionengine.template
+    regions:
+    - us-east-1
