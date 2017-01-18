@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "AZs",
-        "ParameterValue": "$[alfred_genaz_2]"
+        "ParameterValue": "$[alfred_genaz_3]"
     },
     {
         "ParameterKey": "BucketName",
@@ -9,7 +9,7 @@
     },
     {
         "ParameterKey": "InstanceCount",
-        "ParameterValue": "2"
+        "ParameterValue": "3"
     },
     {
         "ParameterKey": "InstanceType",

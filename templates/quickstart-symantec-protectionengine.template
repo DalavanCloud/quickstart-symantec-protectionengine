@@ -24,7 +24,7 @@
       "ConstraintDescription": "must be a list of an existing subnets in the selected Virtual Private Cloud."
     },
 
-    "AvailabilityZone": {
+    "AvailabilityZones": {
       "Type": "List<AWS::EC2::AvailabilityZone::Name>",
       "Description": "The list of AvailabilityZones for your Virtual Private Cloud (VPC)",
       "ConstraintDescription": "must be a list if valid EC2 availability zones for the selected Virtual Private Cloud"
@@ -245,7 +245,7 @@
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
         "AvailabilityZones": {
-          "Ref": "AvailabilityZone"
+          "Ref": "AvailabilityZones"
         },
         "VPCZoneIdentifier": {
           "Ref": "Subnets"
