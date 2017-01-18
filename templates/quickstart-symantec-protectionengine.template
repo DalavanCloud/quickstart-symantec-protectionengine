@@ -56,7 +56,7 @@
     "InstanceCount": {
       "Description": "Number of SPE EC2 instances to launch. Recommended - atleast twice the number of subnets selected.",
       "Type": "Number",
-      "Default": "2"
+      "Default": "3"
     },
 
     "LicenseLocation": {
