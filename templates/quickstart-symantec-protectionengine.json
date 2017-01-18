@@ -1,11 +1,11 @@
 [
     {
         "ParameterKey": "AZs",
-        "ParameterValue": "NEED_VALUE"
+        "ParameterValue": "$[alfred_genaz_2]"
     },
     {
         "ParameterKey": "BucketName",
-        "ParameterValue": "alfred_symentec_bucket"
+        "ParameterValue": "$[alfred__getlicensebucket]"
     },
     {
         "ParameterKey": "InstanceCount",
@@ -25,18 +25,10 @@
     },
     {
         "ParameterKey": "SPELicenseFile",
-        "ParameterValue": "filename"
+        "ParameterValue": "symantec/protectionengine/42350734.slf"
     },
     {
         "ParameterKey": "SSHLocation",
         "ParameterValue": "10.1.2.3/32"
-    },
-    {
-        "ParameterKey": "Subnets",
-        "ParameterValue": "NEED_VALUE"
-    },
-    {
-        "ParameterKey": "VpcId",
-        "ParameterValue": "NEED_VALUE"
     }
 ]
