@@ -1,10 +1,10 @@
 [
     {
-        "ParameterKey": "AZs",
+        "ParameterKey": "AvailabilityZones",
         "ParameterValue": "$[alfred_genaz_3]"
     },
     {
-        "ParameterKey": "BucketName",
+        "ParameterKey": "LicenseLocation",
         "ParameterValue": "$[alfred__getlicensebucket]"
     },
     {
