@@ -162,6 +162,11 @@
       "Default": "c4.4xlarge",
       "AllowedValues": ["m4.2xlarge", "c4.4xlarge"],
       "ConstraintDescription": "must be a valid EC2 instance type."
+    },
+    "InstanceCount": {
+    "Description": "Number of SPE EC2 instances to launch. Recommended - atleast twice the number of subnets selected.",
+    "Type": "Number",
+    "Default": "3"
     }
   },
   "Mappings": {
