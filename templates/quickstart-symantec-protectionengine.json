@@ -16,7 +16,7 @@
         "ParameterValue": "c4.4xlarge"
     },
     {
-        "ParameterKey": "KeyName",
+        "ParameterKey": "KeyPairName",
         "ParameterValue": "cikey"
     },
     {
