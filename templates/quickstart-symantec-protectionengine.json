@@ -5,7 +5,7 @@
     },
     {
         "ParameterKey": "LicenseLocation",
-        "ParameterValue": "$[alfred__getlicensebucket]"
+        "ParameterValue": "$[alfred_getlicensebucket]"
     },
     {
         "ParameterKey": "InstanceCount",
