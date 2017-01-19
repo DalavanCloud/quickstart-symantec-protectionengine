@@ -31,12 +31,6 @@ tests:
     regions:
     - ap-northeast-2
 
-  symantec-replace:
-    parameter_input: quickstart-symantec-protectionengine-replace.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - replace
-
   symantec-ap-south-1:
     parameter_input: quickstart-symantec-protectionengine-ap-south-1.json
     template_file: quickstart-symantec-protectionengine-master.template
