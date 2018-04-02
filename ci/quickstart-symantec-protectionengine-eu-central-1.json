@@ -1,0 +1,34 @@
+[
+    {
+        "ParameterKey": "AvailabilityZones",
+        "ParameterValue": "$[alfred_genaz_2]"
+    },
+    {
+        "ParameterKey": "LicenseLocation",
+        "ParameterValue": "symantec-eu-central-1"
+    },
+    {
+        "ParameterKey": "InstanceCount",
+        "ParameterValue": "2"
+    },
+    {
+        "ParameterKey": "InstanceType",
+        "ParameterValue": "c4.4xlarge"
+    },
+    {
+        "ParameterKey": "KeyPairName",
+        "ParameterValue": "cikey"
+    },
+    {
+        "ParameterKey": "LicenseMode",
+        "ParameterValue": "BYOL"
+    },
+    {
+        "ParameterKey": "SPELicenseFile",
+        "ParameterValue": "42350734.slf"
+    },
+    {
+        "ParameterKey": "SSHLocation",
+        "ParameterValue": "10.1.2.3/32"
+    }
+]
