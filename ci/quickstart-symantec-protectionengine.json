@@ -1,11 +1,11 @@
 [
     {
         "ParameterKey": "AvailabilityZones",
-        "ParameterValue": "$[alfred_genaz_2]"
+        "ParameterValue": "$[taskcat_genaz_2]"
     },
     {
         "ParameterKey": "LicenseLocation",
-        "ParameterValue": "$[alfred_getlicensebucket]"
+        "ParameterValue": "$[taskcat_getlicensebucket]"
     },
     {
         "ParameterKey": "InstanceCount",
