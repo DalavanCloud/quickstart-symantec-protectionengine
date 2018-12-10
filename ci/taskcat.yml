@@ -66,7 +66,7 @@ tests:
    template_file: quickstart-symantec-protectionengine-master.template
    regions:
    - us-east-1
-
+   
   symantec-us-east-2:
    parameter_input: quickstart-symantec-protectionengine-us-east-2.json
    template_file: quickstart-symantec-protectionengine-master.template
