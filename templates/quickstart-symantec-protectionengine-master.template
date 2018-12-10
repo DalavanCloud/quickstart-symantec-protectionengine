@@ -153,8 +153,8 @@
         "InstanceType": {
             "Description": "SPE EC2 instance type",
             "Type": "String",
-            "Default": "c4.4xlarge",
-            "AllowedValues": ["m4.2xlarge", "c4.4xlarge"],
+            "Default": "c5.4xlarge",
+            "AllowedValues": ["m5.2xlarge", "c5.4xlarge"],
             "ConstraintDescription": "must be a valid EC2 instance type."
         },
         "InstanceCount": {
@@ -219,26 +219,32 @@
             }
         }
     },
+    "Conditions": {
+        "GovCloudCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
+        }
+    },
     "Resources": {
         "VPCStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": {
-                    "Fn::Join": [
-                        "/", [{
-                            "Fn::FindInMap": [
-                                "AWSInfoRegionMap", {
-                                    "Ref": "AWS::Region"
-                                },
-                                "QuickStartS3URL"
-                            ]
-                        }, {
-                        "Ref": "QSS3BucketName"
-                        }, {
-                        "Ref": "QSS3KeyPrefix"
-                        },
-                        "submodules/quickstart-aws-vpc/templates/aws-vpc.template"
-                        ]
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template",
+                        {
+                            "QSS3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
                     ]
                 },
                 "Parameters": {
@@ -273,21 +279,17 @@
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": {
-                    "Fn::Join": [
-                        "/", [{
-                            "Fn::FindInMap": [
-                                "AWSInfoRegionMap", {
-                                    "Ref": "AWS::Region"
-                                },
-                                "QuickStartS3URL"
-                            ]
-                        }, {
-                        "Ref": "QSS3BucketName"
-                        }, {
-                        "Ref": "QSS3KeyPrefix"
-                        },
-                        "templates/quickstart-symantec-protectionengine.template"
-                        ]
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/quickstart-symantec-protectionengine.template",
+                        {
+                            "QSS3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
                     ]
                 },
                 "Parameters": {

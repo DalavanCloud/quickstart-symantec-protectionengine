@@ -45,8 +45,8 @@
         "InstanceType": {
             "Description": "SPE EC2 instance type",
             "Type": "String",
-            "Default": "c4.4xlarge",
-            "AllowedValues": ["m4.2xlarge", "c4.4xlarge"],
+            "Default": "c5.4xlarge",
+            "AllowedValues": ["m5.2xlarge", "c5.4xlarge"],
             "ConstraintDescription": "must be a valid EC2 instance type."
         },
 
@@ -69,89 +69,107 @@
 
     "Mappings": {
         "AWSInstanceType2Arch": {
-            "m4.2xlarge": {
+            "m5.2xlarge": {
                 "Arch": "HVM64"
             },
-            "c4.4xlarge": {
+            "c5.4xlarge": {
                 "Arch": "HVM64"
             }
         },
 
         "AWSRegionArch2AMIBYOL": {
             "us-east-1": {
-                "HVM64": "ami-b91f32ae"
+                "HVM64": "ami-041d05513f7f8fa2b"
             },
             "us-east-2": {
-                "HVM64": "ami-3b48125e"
+                "HVM64": "ami-0058e26af7cd5f4bc"
             },
             "us-west-2": {
-                "HVM64": "ami-628e2d02"
+                "HVM64": "ami-0889457a89f2ed02b"
             },
             "us-west-1": {
-                "HVM64": "ami-c90356a9"
+                "HVM64": "ami-05544251cf726406c"
             },
             "eu-west-1": {
-                "HVM64": "ami-c2a0f6b1"
+                "HVM64": "ami-03cfb5ccdb0582368"
+            },
+            "eu-west-2": {
+                "HVM64": "ami-0556c9835f9400b43"
+            },
+            "eu-west-3": {
+                "HVM64": "ami-0f0a657e71058276c"
             },
             "eu-central-1": {
-                "HVM64": "ami-d1ca30be"
+                "HVM64": "ami-093e8a524ea5884b5"
             },
             "ap-northeast-1": {
-                "HVM64": "ami-8dd178ec"
+                "HVM64": "ami-0b0958ab25de6f311"
             },
             "ap-northeast-2": {
-                "HVM64": "ami-9877a3f6"
+                "HVM64": "ami-0eba92007af80d566"
             },
             "ap-southeast-1": {
-                "HVM64": "ami-d0ee4db3"
+                "HVM64": "ami-0068a018d1231ed89"
             },
             "ap-southeast-2": {
-                "HVM64": "ami-26320d45"
+                "HVM64": "ami-00d55960849cee252"
             },
             "ap-south-1": {
-                "HVM64": "ami-388cf857"
+                "HVM64": "ami-01f202b8cf6eb6f74"
             },
             "sa-east-1": {
-                "HVM64": "ami-35920d59"
+                "HVM64": "ami-04c2a90b5b6a9892d"
+            },
+            "ca-central-1": {
+                "HVM64": "ami-04ce6acf7435cd00e"
             }
         },
 
         "AWSRegionArch2AMIPAID": {
             "us-east-1": {
-                "HVM64": "ami-70605667"
+                "HVM64": "ami-60e9c71a"
             },
             "us-east-2": {
-                "HVM64": "ami-c8653fad"
+                "HVM64": "ami-6fe4ce0a"
             },
             "us-west-2": {
-                "HVM64": "ami-d277dbb2"
+                "HVM64": "ami-98f143e0"
             },
             "us-west-1": {
-                "HVM64": "ami-a23662c2"
+                "HVM64": "ami-55e7e535"
             },
             "eu-west-1": {
-                "HVM64": "ami-a2025fd1"
+                "HVM64": "ami-a863fbd1"
+            },
+            "eu-west-2": {
+                "HVM64": "ami-9bfce7ff"
+            },
+            "eu-west-3": {
+                "HVM64": "ami-dcea5ca1"
             },
             "eu-central-1": {
-                "HVM64": "ami-4d965222"
+                "HVM64": "ami-d96df2b6"
             },
             "ap-northeast-1": {
-                "HVM64": "ami-4ad5612b"
+                "HVM64": "ami-063a5b60"
             },
             "ap-northeast-2": {
-                "HVM64": "ami-b3a275dd"
+                "HVM64": "ami-0eeb4860"
             },
             "ap-southeast-1": {
-                "HVM64": "ami-818527e2"
+                "HVM64": "ami-d5f38ca9"
             },
             "ap-southeast-2": {
-                "HVM64": "ami-d3142ab0"
+                "HVM64": "ami-d2d926b0"
             },
             "ap-south-1": {
-                "HVM64": "ami-b13f48de"
+                "HVM64": "ami-8183d5ee"
             },
             "sa-east-1": {
-                "HVM64": "ami-eeed7382"
+                "HVM64": "ami-4084c92c"
+            },
+            "ca-central-1": {
+                "HVM64": "ami-c760e5a3"
             }
         }
 

@@ -13,7 +13,7 @@
     },
     {
         "ParameterKey": "InstanceType",
-        "ParameterValue": "c4.4xlarge"
+        "ParameterValue": "c5.4xlarge"
     },
     {
         "ParameterKey": "KeyPairName",
@@ -30,5 +30,9 @@
     {
         "ParameterKey": "SSHLocation",
         "ParameterValue": "10.1.2.3/32"
+    },
+    {
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "aws-quickstart"
     }
 ]
