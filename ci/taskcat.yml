@@ -62,26 +62,26 @@ tests:
     - eu-west-1
 
  symantec-us-east-1:
-   parameter_input: quickstart-symantec-protectionengine-us-east-1.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - us-east-1
+  parameter_input: quickstart-symantec-protectionengine-us-east-1.json
+  template_file: quickstart-symantec-protectionengine-master.template
+  regions:
+  - us-east-1
  
   symantec-us-east-2:
-    parameter_input: quickstart-symantec-protectionengine-us-east-2.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - us-east-2
+   parameter_input: quickstart-symantec-protectionengine-us-east-2.json
+   template_file: quickstart-symantec-protectionengine-master.template
+   regions:
+   - us-east-2
  
   symantec-us-west-1:
-    parameter_input: quickstart-symantec-protectionengine-us-west-1.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - us-west-1
+   parameter_input: quickstart-symantec-protectionengine-us-west-1.json
+   template_file: quickstart-symantec-protectionengine-master.template
+   regions:
+   - us-west-1
  
   symantec-us-west-2:
-    parameter_input: quickstart-symantec-protectionengine-us-west-2.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - us-west-2
+   parameter_input: quickstart-symantec-protectionengine-us-west-2.json
+   template_file: quickstart-symantec-protectionengine-master.template
+   regions:
+   - us-west-2
  
