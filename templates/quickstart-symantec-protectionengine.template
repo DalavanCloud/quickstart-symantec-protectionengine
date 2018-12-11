@@ -404,6 +404,13 @@
                     "Fn::Base64": {
                         "Fn::Join": ["", [
                             "#!/bin/bash -xe\n",
+                            "yum install git -y\n",
+                            "git clone https://github.com/aws-quickstart/quickstart-linux-utilities.git\n",
+                            "cd /quickstart-linux-utilities\n",
+                            "source quickstart-cfn-tools.source\n",
+                            "qs_update-os || qs_err\n",
+                            "qs_bootstrap_pip || qs_err\n",
+                            "qs_aws-cfn-bootstrap || qs_err\n",
 
                             "/usr/bin/cfn-init -v ",
                             "         --stack ", {
@@ -501,6 +508,13 @@
                     "Fn::Base64": {
                         "Fn::Join": ["", [
                             "#!/bin/bash -xe\n",
+                            "yum install git -y\n",
+                            "git clone https://github.com/aws-quickstart/quickstart-linux-utilities.git\n",
+                            "cd /quickstart-linux-utilities\n",
+                            "source quickstart-cfn-tools.source\n",
+                            "qs_update-os || qs_err\n",
+                            "qs_bootstrap_pip || qs_err\n",
+                            "qs_aws-cfn-bootstrap || qs_err\n",
 
                             "/usr/bin/cfn-init -v ",
                             "         --stack ", {
