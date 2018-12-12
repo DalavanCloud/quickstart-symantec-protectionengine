@@ -25,17 +25,17 @@ tests:
     regions:
     - ap-northeast-1
 
-  symantec-ap-northeast-2:
-    parameter_input: quickstart-symantec-protectionengine-ap-northeast-2.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - ap-northeast-2
+  #symantec-ap-northeast-2:
+  #  parameter_input: quickstart-symantec-protectionengine-ap-northeast-2.json
+  #  template_file: quickstart-symantec-protectionengine-master.template
+  #  regions:
+  #  - ap-northeast-2
 
-  symantec-ap-south-1:
-    parameter_input: quickstart-symantec-protectionengine-ap-south-1.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - ap-south-1
+  #symantec-ap-south-1:
+  #  parameter_input: quickstart-symantec-protectionengine-ap-south-1.json
+  #  template_file: quickstart-symantec-protectionengine-master.template
+  #  regions:
+  #  - ap-south-1
 
   symantec-ap-southeast-1:
     parameter_input: quickstart-symantec-protectionengine-ap-southeast-1.json
@@ -49,11 +49,11 @@ tests:
     regions:
     - ap-southeast-2
 
-  symantec-eu-central-1:
-    parameter_input: quickstart-symantec-protectionengine-eu-central-1.json
-    template_file: quickstart-symantec-protectionengine-master.template
-    regions:
-    - eu-central-1
+  #symantec-eu-central-1:
+  #  parameter_input: quickstart-symantec-protectionengine-eu-central-1.json
+  #  template_file: quickstart-symantec-protectionengine-master.template
+  #  regions:
+  #  - eu-central-1
 
   symantec-eu-west-1:
     parameter_input: quickstart-symantec-protectionengine-eu-west-1.json
@@ -67,11 +67,11 @@ tests:
    regions:
    - us-east-1
    
-  symantec-us-east-2:
-   parameter_input: quickstart-symantec-protectionengine-us-east-2.json
-   template_file: quickstart-symantec-protectionengine-master.template
-   regions:
-   - us-east-2
+  #symantec-us-east-2:
+  # parameter_input: quickstart-symantec-protectionengine-us-east-2.json
+  # template_file: quickstart-symantec-protectionengine-master.template
+  # regions:
+  # - us-east-2
  
   symantec-us-west-1:
    parameter_input: quickstart-symantec-protectionengine-us-west-1.json
